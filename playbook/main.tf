@@ -60,7 +60,6 @@ resource "google_compute_instance" "terraform-staging" {
   provisioner "remote-exec" {
     inline = [
       "sudo apt update",
-      "sudo apt install mc -y",
     ]
     connection {
       type     = "ssh"
@@ -109,7 +108,6 @@ resource "google_compute_instance" "terraform-production" {
   provisioner "remote-exec" {
     inline = [
       "sudo apt update",
-      "sudo apt install mc -y",
     ]
     connection {
       type     = "ssh"
