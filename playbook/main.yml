@@ -1,0 +1,21 @@
+---
+- name: Prepare STAGING environment
+  vars:
+    ansible_host_key_checking: false
+
+  hosts: staging
+  become: yes
+
+  roles:
+    - docker_tools
+    - dockerhub_connect
+    - imagebuilder
+
+- name: Prepare PRODUCTION environment
+  hosts: production
+  become: yes
+
+  roles:
+    - docker_tools
+    - dockerhub_connect
+    - containerserver

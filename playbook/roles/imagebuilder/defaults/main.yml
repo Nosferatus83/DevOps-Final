@@ -1,0 +1,6 @@
+---
+# defaults file for imagebuilder
+#Path to Dockerfile used to build image on Staging Environment
+dest_dockerfile_path: /home/webapp
+#Docker Image Name for Production Environment with boxfuse webapp
+boxfuse_docker_image: nosferatus83/devops_final_prod:latest

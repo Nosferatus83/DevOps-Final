@@ -1,0 +1,5 @@
+---
+# defaults file for dockerhub_connect
+# Dockerhub Repository Credentials
+dockerhub_email: kulbida_va@mail.ru
+dockerhub_user: nosferatus83

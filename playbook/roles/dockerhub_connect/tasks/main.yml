@@ -1,0 +1,7 @@
+---
+# tasks file for dockerhub_connect
+- name: Ensure host machine is authorized at DOCKERHUB via token
+  docker_login:
+    email: '{{ dockerhub_email }}'
+    username: "{{ dockerhub_user }}"
+    password: "{{ dockerhub_token }}"

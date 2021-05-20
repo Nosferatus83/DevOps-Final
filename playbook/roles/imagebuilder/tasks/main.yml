@@ -1,0 +1,23 @@
+---
+# tasks file for imagebuilde
+- name: Create build directory
+  file:
+    path: '{{ dest_dockerfile_path }}/'
+    state: directory
+    owner: root
+    group: root
+    mode: '0777'
+
+- name: Ensure Dockerfile is present on targeted host
+  copy:
+    src: 'Dockerfile'
+    dest: '{{ dest_dockerfile_path }}/Dockerfile'
+    mode: '0777'
+
+- name: Build an image using supplied Dockerfile and push it to a private repo
+  docker_image:
+    build:
+      path: '{{ dest_dockerfile_path }}'
+    name: '{{ boxfuse_docker_image }}'
+    push: yes
+    source: build

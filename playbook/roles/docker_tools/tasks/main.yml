@@ -1,0 +1,12 @@
+---
+# tasks file for docker_tools
+- name: Ensure DOCKER and PYTHON packages are present
+  apt:
+    name: [ 'docker.io' , 'python3-pip' ]
+    state: present
+    update_cache: yes
+
+- name: Ensure DOCKER-PY python SDK for DOCKER is present
+  pip:
+    name: docker-py
+    state: present

@@ -1,0 +1,6 @@
+#Custom Ansible inventory
+[staging]
+staging_instance_ip
+
+[production]
+production_instance_ip
