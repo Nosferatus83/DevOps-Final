@@ -3,17 +3,17 @@ pipeline {
         stages{
         stage('INIT'){
             steps{
-                sh 'cd ./infrastructure && sudo terraform init'
+                sh 'cd ./infrastructure && terraform init'
             }
         }
         stage('plan'){
             steps{
-                sh 'cd ./infrastructure && sudo terraform plan'
+                sh 'cd ./infrastructure && terraform plan'
             }
         }
         stage('apply'){
             steps{
-                sh 'cd ./infrastructure && sudo terraform apply --auto-approve'
+                sh 'cd ./infrastructure && terraform apply --auto-approve'
             }
         }
     }
