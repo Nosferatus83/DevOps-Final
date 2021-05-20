@@ -64,7 +64,7 @@ resource "google_compute_instance" "DevOps_Final" {
   value = google_compute_instance.DevOps_Final[0].network_interface.0.access_config.0.nat_ip
 }
   output "ip_prod" {
-  value = google_compute_instance.DevOps_Final[0].network_interface.0.access_config.0.nat_ip
+  value = google_compute_instance.DevOps_Final[1].network_interface.0.access_config.0.nat_ip
 }
 
 resource "time_sleep" "wait_30_seconds" {
