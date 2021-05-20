@@ -42,6 +42,7 @@ resource "google_compute_instance" "DevOps_Final" {
     ssh-keys = "root:${file("/var/lib/jenkins/.ssh/id_rsa.pub")}" // Point to ssh public key for user root
   }
 
+/*
     provisioner "remote-exec" {
     inline = [
       "sudo apt update",
@@ -55,6 +56,7 @@ resource "google_compute_instance" "DevOps_Final" {
       host        = self.network_interface[0].access_config[0].nat_ip
     }
   }
+*/  
 }
 
   // A variable for extracting the external IP address of the instance
