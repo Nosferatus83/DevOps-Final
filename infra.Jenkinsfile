@@ -20,6 +20,6 @@ pipeline {
             steps{
                 sh 'cd ./infrastructure/inventory && cat hosts'  
             }
-
+        }
     }
 }
