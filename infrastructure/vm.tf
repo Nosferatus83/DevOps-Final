@@ -80,11 +80,13 @@ resource "null_resource" "ansible_hosts_provisioner" {
     command = <<EOT
       export gcp_public_ip_build=$(terraform output ip_build);
       export gcp_public_ip_prod=$(terraform output ip_prod);
+      cat ./inventory/hosts;
       echo $gcp_public_ip_build;
       echo $gcp_public_ip_prod;
       sed -i -e "s/gcp_instance_ip_build/$gcp_public_ip_build/g" ./inventory/hosts;
       sed -i -e "s/gcp_instance_ip_prod/$gcp_public_ip_prod/g" ./inventory/hosts;
       sed -i -e 's/"//g' ./inventory/hosts;
+      cat ./inventory/hosts;
       export ANSIBLE_HOST_KEY_CHECKING=False
     EOT
   }
