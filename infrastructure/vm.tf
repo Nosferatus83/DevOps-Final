@@ -39,7 +39,7 @@ resource "google_compute_instance" "DevOps_Final" {
   }
 
   metadata = {
-    ssh-keys = "root:${file("/root/.ssh/id_rsa.pub")}" // Point to ssh public key for user root
+    ssh-keys = "root:${file("/var/lib/jenkins/.ssh/id_rsa.pub")}" // Point to ssh public key for user root
   }
 
     provisioner "remote-exec" {
@@ -51,7 +51,7 @@ resource "google_compute_instance" "DevOps_Final" {
     connection {
       type     = "ssh"
       user     = "root"
-      private_key = file("/root/.ssh/id_rsa")
+      private_key = file("/var/lib/jenkins/.ssh/id_rsa")
       host        = self.network_interface[0].access_config[0].nat_ip
     }
   }
