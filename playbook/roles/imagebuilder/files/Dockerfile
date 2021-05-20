@@ -2,6 +2,7 @@ FROM tomcat:latest
 RUN apt-get update
 RUN apt-get install maven -y
 RUN apt-get install git -y
+
 #Repo clone, webapp build
 #RUN git clone https://github.com/boxfuse/boxfuse-sample-java-war-hello.git
 RUN git clone https://github.com/Nosferatus83/DevOps-Final-App.git
