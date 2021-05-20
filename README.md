@@ -1,36 +1,36 @@
-# jenkins-terraform-ansible
-Pipeline flow:
-Agent: Launch Jenkins agent in Docker container with Terraform and Ansible (base image: nosferatus83/devops-final-jagent);
-- Stage 1: Clone Terraform manifest and Ansible Playbook form GitHub;
-Base repo with Terraform manifest and Ansible Playbook in Folder = infrastructure
-- Stage 2: Copy GCP authentication json form Jenkins secrets to working directory;
-- Stage 3: Encrypt Dockerhub password with Ansible Vault;
-- Stage 4: Execute Terraform Init, Plan and Apply.
+# Сертификационная работа по DevOps (jenkins,terraform,ansible,docker)
 
-Terraform and Ansible flow:
-Terraform deploys two VM instances (Staging and Production) at Google Cloud (GCP), forms custom inventory for Ansible
-and then invokes Ansible playbook with roles.
-Ansible playbook sets Staging and Production VM configurations according to designated roles:
-STAGING environment: VM 'terraform-staging' is used to build web application "Boxfuse" inside Docker container
-and push docker image with artifact to Dockerhub
-PRODUCTION environment: VM 'terraform-production' is used to pull Docker image with artifact and start docker container
+Задача: Написать Jenkins pipeline, который разворачивает инстансы в GCP, производит на них сборку Java приложения (terraform-staging) и деплоит приложение на
+прод (terraform-production). Необходимо использовать код Terraform и Ansible. Приложение должно быть собрано и развернуто в Docker.
+
+Pipeline:
+Agent: Конвейерный агент запускается в Docker контейнере с Terraform и Ansible (образ собирается из jenkins-agent\Dockerfile => https://hub.docker.com/repository/docker/nosferatus83/devops-final-jagent/general)
+
+- Stage 1: Terraform и Ansible Playbook расположены в Folder = playbook
+- Stage 2: Копируем GCP ключ из креденшинал Jenkins => DevOps-gcp.json;
+- Stage 3: Шифрованый Dockerhub токен dockerhub_token при помощи Ansible Vault записываем в ./roles/dockerhub_connect/defaults/main.yml;
+- Stage 4: Настраиваем VM инфраструктуру: Terraform Init, Plan and Apply.
+
+Terraform и Ansible Playbook:
+Terraform разворачивает 2 VM (Staging and Production) в Google Cloud (GCP) после запускает Ansible playbook с ролями.
+Ansible playbook для Staging и Production VM выполняет конфигурационный настройки подготовленых VM согласно ролям:
+STAGING environment: VM 'terraform-staging' для сборки war файла "Boxfuse" (https://github.com/boxfuse/boxfuse-sample-java-war-hello.git) внутри контейнера с последующей побликацией образа с артифактами в Dockerhub (https://hub.docker.com/repository/docker/nosferatus83/devops_final_prod)
+PRODUCTION environment: VM 'terraform-production' берет Docker образ с Dockerhub и запускает контейнер => результат http://[terraform-production]:8080/hello-1.0/
 
 How to prepare your environment:
 - Get VM Ubuntu 20.04 LTS
 - Install and setup Jenkins, execute following commands:
-apt update
-apt upgrade
-apt install docker.io
-apt install openjdk-11-jdk -y
-wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
-sh -c 'echo deb https://pkg.jenkins.io/debian binary/ > \
-      /etc/apt/sources.list.d/jenkins.list'
-apt update
-apt install jenkins
+     - apt update
+     - apt install docker.io
+     - apt install openjdk-11-jdk -y
+     - wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+     - sh -c 'echo deb https://pkg.jenkins.io/debian binary/ > \ /etc/apt/sources.list.d/jenkins.list'
+     - apt update
+     - apt install jenkins
 
 - Jenkins Admin password:
-cat /var/lib/jenkins/secrets/initialAdminPassword
+     - cat /var/lib/jenkins/secrets/initialAdminPassword
 
 - Set additional permissions for docker agents:
-chmod 777 /var/run/docker.sock
+     - chmod 777 /var/run/docker.sock
 
