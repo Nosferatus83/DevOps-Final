@@ -59,10 +59,10 @@ resource "google_compute_instance" "DevOps_Final" {
 
   // A variable for extracting the external IP address of the instance
   output "ip_build" {
-  value = google_compute_instance.vm-1.network_interface.0.access_config.0.nat_ip
+  value = google_compute_instance.DevOps_Final[0].network_interface.0.access_config.0.nat_ip
 }
   output "ip_prod" {
-  value = google_compute_instance.vm-2.network_interface.0.access_config.0.nat_ip
+  value = google_compute_instance.DevOps_Final[0].network_interface.0.access_config.0.nat_ip
 }
 
 resource "time_sleep" "wait_30_seconds" {
