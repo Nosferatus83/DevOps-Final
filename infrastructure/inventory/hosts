@@ -1,0 +1,5 @@
+  
+#Custom Ansible inventory
+[gcp]
+gcp_instance_ip_build
+gcp_instance_ip_prod
