@@ -3,7 +3,11 @@
 
 //Stage 1: Terraform и Ansible Playbook расположены в Folder = playbook
 //Stage 2: Копируем GCP ключ из креденшинал Jenkins => DevOps-gcp.json;
-//Stage 3: Шифрованый Dockerhub токен dockerhub_token при помощи Ansible Vault записываем в ./roles/dockerhub_connect/defaults/main.yml;
+    // GCP Authentication => Необходимо получить GCP ключ в json файле через Console https://console.cloud.google.com/apis/credentials/serviceaccountkey и поместить его в креденшинал Jenkins
+// Stage 3: Шифрованый Dockerhub токен dockerhub_token при помощи Ansible Vault записываем в ./roles/dockerhub_connect/defaults/main.yml;
+    // Dockerhub Authentication: Необходимо в DockerHub получить токен () потом этот токен поместить в креденшинал Jenkins. 
+    // Выполнить его шифрование: ansible-vault encrypt_string "your_dockerhub_password" --name "dockerhub_token" --vault-password-file vault_pass
+    // Токен будет храниться в vault_pass. Поместить 'dockerhub_token' в переменную ./roles/dockerhub_connect/defaults/main.yml
 //Stage 4: Настраиваем VM инфраструктуру: Terraform Init, Plan and Apply.
 
 //Terraform и Ansible Playbook: Terraform разворачивает 2 VM (Staging and Production) в Google Cloud (GCP) после запускает Ansible playbook с ролями. 
@@ -28,7 +32,7 @@ pipeline {
   stages {
 
     //Stage 1
-    stage('Clone Terraform manifest and Ansible Playbook form GitHub') {
+    stage('Get Playbook form GitHub') {
       steps{
         //Use 'git: Git' to clone Terraform manifest and Ansible playbook Folder =playbook
         git 'https://github.com/Nosferatus83/DevOps-Final2.git'
@@ -36,7 +40,7 @@ pipeline {
     }
 
     //Stage 2
-    stage('Copy GCP authentication json to workspace on Jenkins agent') {
+    stage('Init GCP authentication JSON file') {
       steps {
         //Inject GCP authentication json to agent
         withCredentials([file(credentialsId: 'af8540c9-9e75-404a-a862-45f7a7106c23', variable: 'gcp_auth')]) {
@@ -47,7 +51,7 @@ pipeline {
 
 
     //Stage 3
-    stage('Encrypt Dockerhub password with Ansible Vault') {
+    stage('Init Dockerhub token') {
       steps {
         //Encrypt Dockerhub password with Ansible Vault and export output to Ansible Role defaults
         withCredentials([string(credentialsId: '72fc7148-4206-4a05-a91d-147ab3b7ddd8', variable: 'encrypt')]) {
@@ -57,7 +61,7 @@ pipeline {
     }
 
     //Stage 4
-    stage('Execute Terraform Init, Plan and Apply') {
+    stage('RUN playbook Terraform and Ansible') {
       steps {
         // Execute init, plan and apply for Terraform main.tf
         sh 'cd ./playbook && terraform init'
