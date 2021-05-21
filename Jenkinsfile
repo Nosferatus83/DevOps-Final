@@ -67,7 +67,7 @@ pipeline {
         sh 'cd ./playbook && terraform init -input=false'
         sh 'cd ./playbook && terraform plan -out=tfplan -input=false -destroy'
         sh 'cd ./playbook && terraform apply -input=false tfplan'
-        sh 'cd ./playbook && terraform apply -input=false -parallelism=1 -auto-approve'
+        sh 'cd ./playbook && terraform apply -input=false -parallelism=2 -auto-approve'
       }
     }
 
