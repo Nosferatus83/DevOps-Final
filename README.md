@@ -10,12 +10,15 @@ Agent: Конвейерный агент запускается в Docker кон
 - Stage 2: Копируем GCP ключ из креденшинал Jenkins => DevOps-gcp.json;
 - Stage 3: Шифрованый Dockerhub токен dockerhub_token при помощи Ansible Vault записываем в ./roles/dockerhub_connect/defaults/main.yml;
 - Stage 4: Настраиваем VM инфраструктуру: Terraform Init, Plan and Apply.
+![Image alt](https://github.com/nosferatus83/DevOps-Final/raw/master/pipeline.png)
 
 Terraform и Ansible Playbook:
 Terraform разворачивает 2 VM (Staging and Production) в Google Cloud (GCP) после запускает Ansible playbook с ролями.
 Ansible playbook для Staging и Production VM выполняет конфигурационный настройки подготовленых VM согласно ролям:
 STAGING environment: VM 'terraform-staging' для сборки war файла "Puzzle15" (https://github.com/Nosferatus83/DevOps-Final-App (c) https://github.com/venkaDaria) внутри контейнера с последующей побликацией образа с артифактами в Dockerhub (https://hub.docker.com/repository/docker/nosferatus83/devops_final_prod)
 PRODUCTION environment: VM 'terraform-production' берет Docker образ с Dockerhub и запускает контейнер => результат http://[terraform-production]:80
+
+![Image alt](https://github.com/nosferatus83/DevOps-Final/raw/master/webapp.png)
 
 How to prepare your environment:
 - Get VM Ubuntu 20.04 LTS
