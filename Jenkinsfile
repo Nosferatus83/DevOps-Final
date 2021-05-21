@@ -64,9 +64,9 @@ pipeline {
     stage('RUN playbook Terraform and Ansible') {
       steps {
         // Execute init, plan and apply for Terraform main.tf
-        sh 'cd ./playbook && terraform init'
+        sh 'cd ./playbook && terraform init -input=false'
         sh 'cd ./playbook && terraform plan'
-        sh 'cd ./playbook && terraform apply -auto-approve'
+        sh 'cd ./playbook && terraform apply -input=false -parallelism=1 -auto-approve'
       }
     }
 
