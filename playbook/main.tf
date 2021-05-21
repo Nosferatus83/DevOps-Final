@@ -142,9 +142,6 @@ resource "null_resource" "ansible_hosts_provisioner" {
       export ANSIBLE_HOST_KEY_CHECKING=False
     EOT
   }
-  output "hosts" {
-    value = "Hosts Created"
-  }
 }
 
 /*resource "time_sleep" "wait_5_seconds" {
@@ -158,9 +155,6 @@ resource "null_resource" "ansible_playbook_provisioner" {
   depends_on = [null_resource.ansible_hosts_provisioner]
   provisioner "local-exec" {
     command = "ansible-playbook -u root --vault-password-file 'vault_pass' --private-key '/root/.ssh/id_rsa' -i inventory/hosts main.yml"
-  }
-  output "ansible_playbook" {
-    value = "Playbook finished"
   }
 }
 
