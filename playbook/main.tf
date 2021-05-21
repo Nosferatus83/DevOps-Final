@@ -7,21 +7,6 @@
 # внутри контейнера с последующей побликацией образа с артифактами в Dockerhub (https://hub.docker.com/repository/docker/nosferatus83/devops_final_prod) 
 # PRODUCTION environment: VM 'terraform-production' берет Docker образ с Dockerhub и запускает контейнер => результат http://[terraform-production]:8080/hello-1.0/
  
-#Requirements: on master host install Git, Ansible and Terraform
-#Clone repository to desired location with git clone https://github.com/mas0lik/terraform-docker.git
-
-#GCP Authentication
-#Step 1: Get you GCP authentication json in Console https://console.cloud.google.com/apis/credentials/serviceaccountkey
-#Step 2: Place json in /home/pkhramchenkov/ for example
-#Step 3: Execute export GOOGLE_APPLICATION_CREDENTIALS=/home/pkhramchenkov/DevOps-gcp.json
-#Step 4: Add "export GOOGLE_APPLICATION_CREDENTIALS=/home/pkhramchenkov/DevOps-gcp.json" to /root/.bashrc
-
-#Dockerhub Authentication
-#Step 1: Encrypt yor dockerhub password using command ansible-vault
-#Execute ansible-vault encrypt_string "your_dockerhub_password" --name "dockerhub_token" --vault-password-file vault_pass
-#Default vault password is stored in vault_pass. Change it!
-#Step 2: Supply ansible vault output as 'dockerhub_token' var in roles/dockerhub_connect/defaults/main.yml as well
-#other credentials
 terraform {
   required_providers {
     google = {
