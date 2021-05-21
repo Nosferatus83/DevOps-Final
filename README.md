@@ -14,8 +14,8 @@ Agent: Конвейерный агент запускается в Docker кон
 Terraform и Ansible Playbook:
 Terraform разворачивает 2 VM (Staging and Production) в Google Cloud (GCP) после запускает Ansible playbook с ролями.
 Ansible playbook для Staging и Production VM выполняет конфигурационный настройки подготовленых VM согласно ролям:
-STAGING environment: VM 'terraform-staging' для сборки war файла "Boxfuse" (https://github.com/boxfuse/boxfuse-sample-java-war-hello.git) внутри контейнера с последующей побликацией образа с артифактами в Dockerhub (https://hub.docker.com/repository/docker/nosferatus83/devops_final_prod)
-PRODUCTION environment: VM 'terraform-production' берет Docker образ с Dockerhub и запускает контейнер => результат http://[terraform-production]:8080/hello-1.0/
+STAGING environment: VM 'terraform-staging' для сборки war файла "Puzzle15" (https://github.com/Nosferatus83/DevOps-Final-App (c) https://github.com/venkaDaria) внутри контейнера с последующей побликацией образа с артифактами в Dockerhub (https://hub.docker.com/repository/docker/nosferatus83/devops_final_prod)
+PRODUCTION environment: VM 'terraform-production' берет Docker образ с Dockerhub и запускает контейнер => результат http://[terraform-production]:80
 
 How to prepare your environment:
 - Get VM Ubuntu 20.04 LTS

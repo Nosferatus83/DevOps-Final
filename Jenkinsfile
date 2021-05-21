@@ -5,16 +5,16 @@
 //Stage 2: Копируем GCP ключ из креденшинал Jenkins => DevOps-gcp.json;
     // GCP Authentication => Необходимо получить GCP ключ в json файле через Console https://console.cloud.google.com/apis/credentials/serviceaccountkey и поместить его в креденшинал Jenkins
 // Stage 3: Шифрованый Dockerhub токен dockerhub_token при помощи Ansible Vault записываем в ./roles/dockerhub_connect/defaults/main.yml;
-    // Dockerhub Authentication: Необходимо в DockerHub получить токен () потом этот токен поместить в креденшинал Jenkins. 
+    // Dockerhub Authentication: Необходимо в DockerHub получить токен (https://docs.docker.com/docker-hub/access-tokens/) потом этот токен поместить в креденшинал Jenkins. 
     // Выполнить его шифрование: ansible-vault encrypt_string "your_dockerhub_password" --name "dockerhub_token" --vault-password-file vault_pass
     // Токен будет храниться в vault_pass. Поместить 'dockerhub_token' в переменную ./roles/dockerhub_connect/defaults/main.yml
 //Stage 4: Настраиваем VM инфраструктуру: Terraform Init, Plan and Apply.
 
 //Terraform и Ansible Playbook: Terraform разворачивает 2 VM (Staging and Production) в Google Cloud (GCP) после запускает Ansible playbook с ролями. 
 //Ansible playbook для Staging и Production VM выполняет конфигурационный настройки подготовленых VM согласно ролям:
-//STAGING environment: VM 'terraform-staging' для сборки war файла "Boxfuse" (https://github.com/boxfuse/boxfuse-sample-java-war-hello.git) 
+//STAGING environment: VM 'terraform-staging' для сборки war файла "Puzzle15" (https://github.com/Nosferatus83/DevOps-Final-App (c) https://github.com/venkaDaria)
 //внутри контейнера с последующей побликацией образа с артифактами в Dockerhub (https://hub.docker.com/repository/docker/nosferatus83/devops_final_prod) 
-//PRODUCTION environment: VM 'terraform-production' берет Docker образ с Dockerhub и запускает контейнер => результат http://[terraform-production]:8080/hello-1.0/
+//PRODUCTION environment: VM 'terraform-production' берет Docker образ с Dockerhub и запускает контейнер => результат http://[terraform-production]:80
 
 pipeline {
 

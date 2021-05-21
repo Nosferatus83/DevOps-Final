@@ -6,4 +6,4 @@
       image: '{{ boxfuse_docker_image }}'
       state: started
       ports:
-        - "8080:8080"
+        - "80:8080"
