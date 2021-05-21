@@ -65,8 +65,8 @@ pipeline {
       steps {
         // Execute init, plan and apply for Terraform main.tf
         sh 'cd ./playbook && terraform init -input=false'
-        sh 'cd ./playbook && terraform plan'
-        sh 'cd ./playbook && terraform apply -input=false -auto-approve -destroy'
+        sh 'cd ./playbook && terraform plan -out=tfplan -input=false -destroy'
+        sh 'cd ./playbook && terraform apply -input=false tfplan'
       }
     }
 
