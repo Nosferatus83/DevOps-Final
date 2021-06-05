@@ -36,5 +36,9 @@ How to prepare your environment:
      - cat /var/lib/jenkins/secrets/initialAdminPassword
 
 - Set additional permissions for docker agents:
+     - usermod -aG docker jenkins
+     - usermod -aG root jenkins
      - chmod 777 /var/run/docker.sock
+     - systemctl restart jenkins
+
 
