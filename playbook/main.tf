@@ -143,18 +143,18 @@ resource "null_resource" "ansible_hosts_provisioner" {
   }
 }
 /*  Вынес ansible-playbook в JankinsFile
-
-
-resource "time_sleep" "wait_5_seconds" {
-  depends_on = [null_resource.ansible_hosts_provisioner]
-
-  create_duration = "5s"
-}
-
-resource "null_resource" "ansible_playbook_provisioner" {
-  depends_on = [time_sleep.wait_5_seconds]
-  provisioner "local-exec" {
-    command = "ansible-playbook -u root --vault-password-file 'vault_pass' --private-key '/root/.ssh/id_rsa' -i inventory/hosts main.yml"
-  }
-}
+//
+//
+//resource "time_sleep" "wait_5_seconds" {
+//  depends_on = [null_resource.ansible_hosts_provisioner]
+//
+//  create_duration = "5s"
+//}
+//
+//resource "null_resource" "ansible_playbook_provisioner" {
+//  depends_on = [time_sleep.wait_5_seconds]
+//  provisioner "local-exec" {
+//    command = "ansible-playbook -u root --vault-password-file 'vault_pass' --private-key '/root/.ssh/id_rsa' -i inventory/hosts main.yml"
+//  }
+//}
 */
