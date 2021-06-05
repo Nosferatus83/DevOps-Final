@@ -10,6 +10,7 @@ Agent: Конвейерный агент запускается в Docker кон
 - Stage 2: Копируем GCP ключ из креденшинал Jenkins => DevOps-gcp.json;
 - Stage 3: Шифрованый Dockerhub токен dockerhub_token при помощи Ansible Vault записываем в ./roles/dockerhub_connect/defaults/main.yml;
 - Stage 4: Настраиваем VM инфраструктуру: Terraform Init, Plan and Apply.
+- Stage 5 (NEW): В настроенной VM инфраструктуре выполняем сборку WAR, который заворачиваем в образ контейнера, данный артифакт выгружается в DockerHub  и в последствии деплоится на Production: ansible-playbook.
 ![Image alt](https://github.com/nosferatus83/DevOps-Final/raw/master/pipeline.png)
 
 Terraform и Ansible Playbook:
