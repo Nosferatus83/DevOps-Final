@@ -1,6 +1,6 @@
 # 1 Step: Инфраструктурная подготовка "google_compute_instance": terraform-staging  и terraform-production.
 # 2 Step: Подготавливаем ./inventory/hosts с полученными ip адресами VM для ansible-playbook
-# 3 Step: Запускаем ansible-playbook
+# 3 Step: Запускаем ansible-playbook => закомментировал и перенес в JankinsFile
 
 # Ansible playbook для Staging и Production VM выполняет конфигурационный настройки подготовленых VM согласно ролям:
 # STAGING environment: VM 'terraform-staging' для сборки war файла webapp "Puzzle15" (https://github.com/Nosferatus83/DevOps-Final-App (c) https://github.com/venkaDaria) 
@@ -142,6 +142,8 @@ resource "null_resource" "ansible_hosts_provisioner" {
     EOT
   }
 }
+/*  Вынес ansible-playbook в JankinsFile
+
 
 resource "time_sleep" "wait_5_seconds" {
   depends_on = [null_resource.ansible_hosts_provisioner]
@@ -155,4 +157,4 @@ resource "null_resource" "ansible_playbook_provisioner" {
     command = "ansible-playbook -u root --vault-password-file 'vault_pass' --private-key '/root/.ssh/id_rsa' -i inventory/hosts main.yml"
   }
 }
-
+*/

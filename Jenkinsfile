@@ -9,6 +9,7 @@
     // Выполнить его шифрование: ansible-vault encrypt_string "your_dockerhub_password" --name "dockerhub_token" --vault-password-file vault_pass
     // Токен будет храниться в vault_pass. Поместить 'dockerhub_token' в переменную ./roles/dockerhub_connect/defaults/main.yml
 //Stage 4: Настраиваем VM инфраструктуру: Terraform Init, Plan and Apply.
+//Stage 5: В настроенной VM инфраструктуре выполняем сборку WAR, который заворачиваем в образ контейнера, данный артифакт выгружается в DockerHub  и в последствии деплоится на Production: ansible-playbook.
 
 //Terraform и Ansible Playbook: Terraform разворачивает 2 VM (Staging and Production) в Google Cloud (GCP) после запускает Ansible playbook с ролями. 
 //Ansible playbook для Staging и Production VM выполняет конфигурационный настройки подготовленых VM согласно ролям:
@@ -61,15 +62,24 @@ pipeline {
     }
 
     //Stage 4
-    stage('RUN playbook Terraform and Ansible') {
+    stage('RUN Terraform (prepared VM infra)') {
       steps {
-        // Execute init, plan and apply for Terraform main.tf
+        // Execute init, plan and apply for Terraform ./playbook/main.tf
         sh 'cd ./playbook && terraform init -input=false'
         sh 'cd ./playbook && terraform plan -out=tfplan -input=false -destroy'
         sh 'cd ./playbook && terraform apply -input=false tfplan'
         sh 'cd ./playbook && terraform apply -input=false -auto-approve'
       }
     }
+
+    //Stage 5
+    stage('RUN Ansible-playbook (build, deploy)') {
+      steps {
+        // Execute Ansible-playbook ./playbook/main.yml
+        sh 'cd ./playbook && ansible-playbook -u root --vault-password-file 'vault_pass' --private-key '/root/.ssh/id_rsa' -i inventory/hosts main.yml'
+      }
+    }
+
 
   }
 }
