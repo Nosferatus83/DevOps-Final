@@ -76,7 +76,7 @@ pipeline {
     stage('RUN Ansible-playbook (build, deploy)') {
       steps {
         // Execute Ansible-playbook ./playbook/main.yml
-        sh 'cd ./playbook && ansible-playbook -u root --vault-password-file 'vault_pass' --private-key '/root/.ssh/id_rsa' -i inventory/hosts main.yml'
+        sh "cd ./playbook && ansible-playbook -u root --vault-password-file 'vault_pass' --private-key '/root/.ssh/id_rsa' -i inventory/hosts main.yml"
       }
     }
 
