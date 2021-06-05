@@ -26,7 +26,7 @@ pipeline {
       //Use arguments to map sockets and user Root
       args  '-v /var/run/docker.sock:/var/run/docker.sock -u 0:0'
       //Use to automate authentication at Docker Hub
-      registryCredentialsId '0423836f-27d7-48c6-b5fe-59511220d527'
+      //registryCredentialsId '0423836f-27d7-48c6-b5fe-59511220d527'
     }
   }
 
