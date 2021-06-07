@@ -36,7 +36,8 @@ pipeline {
     stage('Get Playbook form GitHub') {
       steps{
         //Use 'git: Git' to clone Terraform manifest and Ansible playbook Folder =playbook
-        git 'https://github.com/Nosferatus83/DevOps-Final.git'
+        git branch: 'optimaze1',
+            url: 'https://github.com/Nosferatus83/DevOps-Final.git'
       }
     }
 
