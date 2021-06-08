@@ -1,0 +1,10 @@
+---
+- name: On PRODUCTION run container with APP
+  vars:
+    ansible_host_key_checking: false
+
+  hosts: production
+  become: yes
+
+  roles:
+    - containerserver

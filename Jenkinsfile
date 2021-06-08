@@ -63,7 +63,7 @@ pipeline {
     }
 
     //Stage 4
-    stage('RUN Terraform (prepared VM infra)') {
+    stage('RUN Terraform (Create VM Stage&Prod)') {
       steps {
         // Execute init, plan and apply for Terraform ./playbook/main.tf
         sh 'cd ./playbook && terraform init -input=false'
@@ -74,13 +74,28 @@ pipeline {
     }
 
     //Stage 5
-    stage('RUN Ansible-playbook (build, deploy)') {
+    stage('RUN Ansible-playbook (prepared Stage&Prod)') {
       steps {
         // Execute Ansible-playbook ./playbook/main.yml
         sh "cd ./playbook && ansible-playbook -u root --vault-password-file 'vault_pass' --private-key '/root/.ssh/id_rsa' -i inventory/hosts main.yml"
       }
     }
 
+    //Stage 6
+    stage('RUN Ansible-playbook (Build artifact)') {
+      steps {
+        // Execute Ansible-playbook ./playbook/main.yml
+        sh "cd ./playbook && ansible-playbook -u root --vault-password-file 'vault_pass' --private-key '/root/.ssh/id_rsa' -i inventory/hosts build.yml -vvv"
+      }
+    }
+
+    //Stage 7
+    stage('RUN Ansible-playbook (Deploy artifact)') {
+      steps {
+        // Execute Ansible-playbook ./playbook/main.yml
+        sh "cd ./playbook && ansible-playbook -u root --vault-password-file 'vault_pass' --private-key '/root/.ssh/id_rsa' -i inventory/hosts deploy.yml -vvv"
+      }
+    }
 
   }
 }

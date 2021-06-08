@@ -1,0 +1,10 @@
+---
+- name: On STAGING BUILD app atrifact in image Docker and push DockerHub
+  vars:
+    ansible_host_key_checking: false
+
+  hosts: staging
+  become: yes
+
+  roles:
+    - imagebuilder
