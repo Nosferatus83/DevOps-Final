@@ -8,7 +8,10 @@
     // Dockerhub Authentication: Необходимо в DockerHub получить токен (https://docs.docker.com/docker-hub/access-tokens/) потом этот токен поместить в креденшинал Jenkins. 
     // Выполнить его шифрование: ansible-vault encrypt_string "your_dockerhub_password" --name "dockerhub_token" --vault-password-file vault_pass
     // Токен будет храниться в vault_pass. Поместить 'dockerhub_token' в переменную ./roles/dockerhub_connect/defaults/main.yml
-//Stage 4: Настраиваем VM инфраструктуру: Terraform Init, Plan and Apply.
+//Stage 4: Создаем  VM инфраструктуру: Terraform Init, Plan and Apply.
+//Stage 5: Настраеваем VM инфраструктуру Staging and Production (ставим пакеты docker + Credentials с хранилищем артифактов DockerHub): ansible-playbook.
+//Stage 6: На Stage сервере выполняем сборку WAR, который заворачиваем в образ контейнера, данный артифакт выгружается в DockerHub: ansible-playbook.
+//Stage 7: На Production артифакт (образ) выгружается из DockerHub и запускается: ansible-playbook.
 
 //Terraform и Ansible Playbook: Terraform разворачивает 2 VM (Staging and Production) в Google Cloud (GCP) после запускает Ansible playbook с ролями. 
 //Ansible playbook для Staging и Production VM выполняет конфигурационный настройки подготовленых VM согласно ролям:
@@ -35,7 +38,8 @@ pipeline {
     stage('Get Playbook form GitHub') {
       steps{
         //Use 'git: Git' to clone Terraform manifest and Ansible playbook Folder =playbook
-        git 'https://github.com/Nosferatus83/DevOps-Final.git'
+        git branch: 'master',
+            url: 'https://github.com/Nosferatus83/DevOps-Final.git'
       }
     }
 
@@ -61,13 +65,37 @@ pipeline {
     }
 
     //Stage 4
-    stage('RUN playbook Terraform and Ansible') {
+    stage('RUN Terraform (Create VM Stage&Prod)') {
       steps {
-        // Execute init, plan and apply for Terraform main.tf
+        // Execute init, plan and apply for Terraform ./playbook/main.tf
         sh 'cd ./playbook && terraform init -input=false'
         sh 'cd ./playbook && terraform plan -out=tfplan -input=false -destroy'
         sh 'cd ./playbook && terraform apply -input=false tfplan'
         sh 'cd ./playbook && terraform apply -input=false -auto-approve'
+      }
+    }
+
+    //Stage 5
+    stage('RUN Ansible-playbook (prepared Stage&Prod)') {
+      steps {
+        // Execute Ansible-playbook ./playbook/main.yml
+        sh "cd ./playbook && ansible-playbook -u root --vault-password-file 'vault_pass' --private-key '/root/.ssh/id_rsa' -i inventory/hosts main.yml"
+      }
+    }
+
+    //Stage 6
+    stage('RUN Ansible-playbook (Build&Storage artifact)') {
+      steps {
+        // Execute Ansible-playbook ./playbook/build.yml
+        sh "cd ./playbook && ansible-playbook -u root --vault-password-file 'vault_pass' --private-key '/root/.ssh/id_rsa' -i inventory/hosts build.yml -v"
+      }
+    }
+
+    //Stage 7
+    stage('RUN Ansible-playbook (Deploy artifact)') {
+      steps {
+        // Execute Ansible-playbook ./playbook/deploy.yml
+        sh "cd ./playbook && ansible-playbook -u root --vault-password-file 'vault_pass' --private-key '/root/.ssh/id_rsa' -i inventory/hosts deploy.yml -v"
       }
     }
 

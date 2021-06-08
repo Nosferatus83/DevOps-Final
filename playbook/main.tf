@@ -1,12 +1,6 @@
 # 1 Step: Инфраструктурная подготовка "google_compute_instance": terraform-staging  и terraform-production.
 # 2 Step: Подготавливаем ./inventory/hosts с полученными ip адресами VM для ansible-playbook
-# 3 Step: Запускаем ansible-playbook
 
-# Ansible playbook для Staging и Production VM выполняет конфигурационный настройки подготовленых VM согласно ролям:
-# STAGING environment: VM 'terraform-staging' для сборки war файла webapp "Puzzle15" (https://github.com/Nosferatus83/DevOps-Final-App (c) https://github.com/venkaDaria) 
-# внутри контейнера с последующей побликацией образа с артифактами в Dockerhub (https://hub.docker.com/repository/docker/nosferatus83/devops_final_prod) 
-# PRODUCTION environment: VM 'terraform-production' берет Docker образ с Dockerhub и запускает контейнер => результат http://[terraform-production]:80
- 
 terraform {
   required_providers {
     google = {
@@ -142,17 +136,3 @@ resource "null_resource" "ansible_hosts_provisioner" {
     EOT
   }
 }
-
-resource "time_sleep" "wait_5_seconds" {
-  depends_on = [null_resource.ansible_hosts_provisioner]
-
-  create_duration = "5s"
-}
-
-resource "null_resource" "ansible_playbook_provisioner" {
-  depends_on = [time_sleep.wait_5_seconds]
-  provisioner "local-exec" {
-    command = "ansible-playbook -u root --vault-password-file 'vault_pass' --private-key '/root/.ssh/id_rsa' -i inventory/hosts main.yml"
-  }
-}
-

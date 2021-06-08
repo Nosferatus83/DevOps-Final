@@ -2,8 +2,8 @@
 # tasks file for containerserver
 - name: Ensure container is present on host and running
   docker_container:
-      name: '{{ boxfuse_docker_container }}'
-      image: '{{ boxfuse_docker_image }}'
+      name: '{{ docker_container }}'
+      image: '{{ docker_image }}'
       state: started
       ports:
         - "80:8080"
