@@ -13,7 +13,7 @@ Agent: Конвейерный агент запускается в Docker кон
 - Stage 5 (New): Настраеваем VM инфраструктуру Staging and Production (ставим пакеты docker + Credentials с хранилищем артифактов DockerHub): ansible-playbook.
 - Stage 6 (New): На Stage сервере выполняем сборку WAR, который заворачиваем в образ контейнера, данный артифакт выгружается в DockerHub: ansible-playbook.
 - Stage 7 (New): На Production артифакт (образ) выгружается из DockerHub и запускается: ansible-playbook.
-![Image alt](https://github.com/nosferatus83/DevOps-Final/raw/optimaze1/pipeline_new1.png)
+![Image alt](https://github.com/nosferatus83/DevOps-Final/raw/master/pipeline.png)
 
 Terraform и Ansible Playbook:
 Terraform разворачивает 2 VM (Staging and Production) в Google Cloud (GCP) после запускает Ansible playbook с ролями.
