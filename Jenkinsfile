@@ -8,8 +8,10 @@
     // Dockerhub Authentication: Необходимо в DockerHub получить токен (https://docs.docker.com/docker-hub/access-tokens/) потом этот токен поместить в креденшинал Jenkins. 
     // Выполнить его шифрование: ansible-vault encrypt_string "your_dockerhub_password" --name "dockerhub_token" --vault-password-file vault_pass
     // Токен будет храниться в vault_pass. Поместить 'dockerhub_token' в переменную ./roles/dockerhub_connect/defaults/main.yml
-//Stage 4: Настраиваем VM инфраструктуру: Terraform Init, Plan and Apply.
-//Stage 5: В настроенной VM инфраструктуре выполняем сборку WAR, который заворачиваем в образ контейнера, данный артифакт выгружается в DockerHub  и в последствии деплоится на Production: ansible-playbook.
+//Stage 4: Создаем  VM инфраструктуру: Terraform Init, Plan and Apply.
+//Stage 5: Настраеваем VM инфраструктуру Staging and Production (ставим пакеты docker + Credentials с хранилищем артифактов DockerHub): ansible-playbook.
+//Stage 6: На Stage сервере выполняем сборку WAR, который заворачиваем в образ контейнера, данный артифакт выгружается в DockerHub: ansible-playbook.
+//Stage 7: На Production артифакт (образ) выгружается из DockerHub и запускается: ansible-playbook.
 
 //Terraform и Ansible Playbook: Terraform разворачивает 2 VM (Staging and Production) в Google Cloud (GCP) после запускает Ansible playbook с ролями. 
 //Ansible playbook для Staging и Production VM выполняет конфигурационный настройки подготовленых VM согласно ролям:
@@ -82,18 +84,18 @@ pipeline {
     }
 
     //Stage 6
-    stage('RUN Ansible-playbook (Build artifact)') {
+    stage('RUN Ansible-playbook (Build&Storage artifact)') {
       steps {
-        // Execute Ansible-playbook ./playbook/main.yml
-        sh "cd ./playbook && ansible-playbook -u root --vault-password-file 'vault_pass' --private-key '/root/.ssh/id_rsa' -i inventory/hosts build.yml -vvv"
+        // Execute Ansible-playbook ./playbook/build.yml
+        sh "cd ./playbook && ansible-playbook -u root --vault-password-file 'vault_pass' --private-key '/root/.ssh/id_rsa' -i inventory/hosts build.yml -v"
       }
     }
 
     //Stage 7
     stage('RUN Ansible-playbook (Deploy artifact)') {
       steps {
-        // Execute Ansible-playbook ./playbook/main.yml
-        sh "cd ./playbook && ansible-playbook -u root --vault-password-file 'vault_pass' --private-key '/root/.ssh/id_rsa' -i inventory/hosts deploy.yml -vvv"
+        // Execute Ansible-playbook ./playbook/deploy.yml
+        sh "cd ./playbook && ansible-playbook -u root --vault-password-file 'vault_pass' --private-key '/root/.ssh/id_rsa' -i inventory/hosts deploy.yml -v"
       }
     }
 

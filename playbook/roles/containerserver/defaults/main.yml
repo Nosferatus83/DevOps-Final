@@ -1,6 +1,6 @@
 ---
 # defaults file for containerserver
 #Docker Container Name on Host
-boxfuse_docker_container: boxfuse-webapp
+docker_container: webapp-puzzle15
 #Docker Image Name used to run container
-boxfuse_docker_image: nosferatus83/devops_final_prod:latest
+docker_image: nosferatus83/devops_final_prod:latest
